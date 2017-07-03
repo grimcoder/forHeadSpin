@@ -65,13 +65,10 @@ class Sessions extends React.Component {
                 var s = this.state.selection;
 
                 isSelected = i.tags.filter((tg)=>{
-
                     return s.filter((d)=>{
                             return d.name == tg.name && d.value == tg.value;
                         }).length > 0;
-
                 }).length > 0 ? 'selected' : '';
-
             }
 
             var tagsList = i.tags.map((it, m)=> {
@@ -82,9 +79,9 @@ class Sessions extends React.Component {
 
             var addRow = this.state.addTag && this.state.tagRow == n ?
                 <span>
-                    TagName: <input type="text" ref="addTagName"></input>
-                    Value: <input type="text" ref="addTagValue"></input>
-                    <button onClick={this.addTagComplete.bind(this)}></button>
+                    <input placeholder="name" type="text" ref="addTagName"></input>
+                    <input placeholder="value" type="text" ref="addTagValue"></input>
+                    <button onClick={this.addTagComplete.bind(this)}>Add</button>
                 </span>
                 : null;
 
