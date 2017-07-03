@@ -37,6 +37,7 @@ render(){
                 }).length > 0;
 
             }).length > 0;
+
         });
 
         var objNum = selected.length;
@@ -58,7 +59,7 @@ render(){
         var list = s.map((i, m)=>{return i.name + '=' + i.value }).join(' or ');
 
         return (
-        <div>
+        <div onMouseOver={this.props.selectionSelected.bind(this, s)} onMouseOut={this.props.selectionUnSelected.bind(this, s)}>
             <div className="selectionHeader">{list}</div>
             <div>{objNum} objects in this selection.</div>
             <div><b>Average time: {avgTime}</b></div>

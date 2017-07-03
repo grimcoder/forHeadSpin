@@ -9,6 +9,9 @@ class Sessions extends React.Component {
         super(props);
         this.state = {data: input_data};
         this.deleteTag = this.deleteTag.bind(this);
+
+        this.selectionSelected = this.selectionSelected.bind(this);
+        this.selectionUnSelected = this.selectionUnSelected.bind(this);
     }
 
     deleteTag(n, it) {
@@ -31,19 +34,21 @@ class Sessions extends React.Component {
         var downloads = this.state.data.downloads;
 
         var row = downloads[this.state.tagRow];
-
         var name = this.refs.addTagName.value;
         var value = this.refs.addTagValue.value;
-
         var newTag = {}
-
         newTag['name'] = name;
         newTag['value'] = value;
         row.tags.push(newTag);
-
         this.setState({addTag: false, tagRow: undefined, data: this.state.data});
+    }
 
+    selectionSelected(item){
+        this.setState({isSelected: true, selection: item});
+    }
 
+    selectionUnSelected(item){
+        this.setState({isSelected: false, selection: undefined});
     }
 
     render() {
@@ -54,18 +59,28 @@ class Sessions extends React.Component {
 
         var dwnldList = downloads.map((i, n)=> {
 
+            var isSelected = ''
+
+            if (this.state.isSelected){
+                var s = this.state.selection;
+
+                isSelected = i.tags.filter((tg)=>{
+
+                    return s.filter((d)=>{
+                            return d.name == tg.name && d.value == tg.value;
+                        }).length > 0;
+
+                }).length > 0 ? 'selected' : '';
+
+            }
+
             var tagsList = i.tags.map((it, m)=> {
-
-
                 return (<td key={m}><span>{it['name']}={it['value']}
                     <button onClick={this.deleteTag.bind(this, n, it)}>☠</button></span>
                 </td>)
-
             })
 
-
             var addRow = this.state.addTag && this.state.tagRow == n ?
-
                 <span>
                     TagName: <input type="text" ref="addTagName"></input>
                     Value: <input type="text" ref="addTagValue"></input>
@@ -73,34 +88,34 @@ class Sessions extends React.Component {
                 </span>
                 : null;
 
-
             return (
-                <tr key={n}>
+                <tr key={n} className={isSelected}>
                     <td className="cell"><span>Size: {i.size} </span></td>
                     <td className="cell"><span>Time: {i.time}</span></td>
                     {tagsList}
-
                     <td>
                         <button onClick={this.addTag.bind(this, n)}>+</button>
                     </td>
                     {addRow}
-
-
                 </tr>
-
 
             );
         });
 
         return (
             <div>
+
                 <table>
                     <tbody>
                     {dwnldList}
                     </tbody>
                 </table>
+
                 <hr />
-                <Selections state={this.state} />
+
+                <Selections state={this.state}
+                            selectionSelected={this.selectionSelected}
+                            selectionUnSelected={this.selectionUnSelected} />
             </div>
         );
     }
