@@ -3,6 +3,8 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var gutil = require('gulp-util');
 var babelify = require('babelify');
+var connect = require('gulp-connect');
+
 
 // External dependencies you do not want to rebundle while developing,
 // but include in your application deployment
@@ -19,6 +21,10 @@ gulp.task('scripts', function () {
     bundleApp(false);
 });
 
+gulp.task('webserver', function() {
+    connect.server();
+});
+
 gulp.task('deploy', function (){
     bundleApp(true);
 });
@@ -30,7 +36,7 @@ gulp.task('watch', function () {
 // When running 'gulp' on the terminal this task will fire.
 // It will start watching for changes in every .js file.
 // If there's a change, the task 'scripts' defined above will fire.
-gulp.task('default', ['scripts','watch']);
+gulp.task('default', ['scripts','watch','webserver']);
 
 // Private Functions
 // ----------------------------------------------------------------------------
